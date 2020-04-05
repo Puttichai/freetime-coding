@@ -17,6 +17,10 @@ class SudokuBoard(object):
         return self._data.__repr__()
 
 
+    def __getitem__(self, index):
+        return self._data[index]
+
+
     def GetRow(self, irow):
         return self._data[irow]
 

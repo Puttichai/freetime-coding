@@ -3,6 +3,13 @@ from numpy import array
 """
 
 class SudokuSolver1(object):
+    """Method:
+
+    - Sweep through the board from left to right, top to bottom. 
+    - Fill an empty cell with the smallest valid number, then go on.
+    - If not possible to go on anymore, move back and increase the number by one, and continue.
+
+    """
 
     def __init__(self, board):
         # An instance of a sudoku board
@@ -16,7 +23,7 @@ class SudokuSolver1(object):
         # Initialize icurrentrow and icurrentcolumn to be the first empty cell
         self._icurrentrow = 0
         self._icurrentcolumn = 0
-        if self._board._data[self._icurrentrow][self._icurrentcolumn] > 0:
+        if self._board[self._icurrentrow][self._icurrentcolumn] > 0:
             self._icurrentrow, self._icurrentcolumn = self.GetNextEmptyCell(self._icurrentrow, self._icurrentcolumn)
 
 
@@ -27,7 +34,7 @@ class SudokuSolver1(object):
     def GetNextCell(self, irow, icolumn):
         if irow == 8 and icolumn == 8:
             return -1, -1 # reached the end of the board
-        
+
         if icolumn == 8:
             irow += 1
         icolumn = (icolumn + 1) % 9
@@ -41,7 +48,6 @@ class SudokuSolver1(object):
         if icolumn == 0:
             irow -= 1
         icolumn = (icolumn - 1) % 9
-        print 'GetPreviousCell: (%d, %d)'%(irow, icolumn)
         return irow, icolumn
 
 
@@ -49,7 +55,6 @@ class SudokuSolver1(object):
         newirow, newicolumn = self.GetNextCell(irow, icolumn)
         while self.IsCellGiven(newirow, newicolumn):
             newirow, newicolumn = self.GetNextCell(newirow, newicolumn)
-            print 'Next cell: (%d, %d)'%(newirow, newicolumn)
             if newirow == -1 and newicolumn == -1:
                 break
         return newirow, newicolumn
@@ -58,8 +63,7 @@ class SudokuSolver1(object):
     def GetPreviousEmptyCell(self, irow, icolumn):
         newirow, newicolumn = self.GetPreviousCell(irow, icolumn)
         while self.IsCellGiven(newirow, newicolumn):
-            newirow, newicolumn, self.GetPreviousCell(newirow, newicolumn)
-            print 'Previous cell: (%d, %d), isgiven=%d, %d'%(newirow, newicolumn, self.IsCellGiven(newirow, newicolumn), self._initialboarddata[newirow][newicolumn])
+            newirow, newicolumn = self.GetPreviousCell(newirow, newicolumn)
             if newirow == -1 and newicolumn == -1:
                 break
         return newirow, newicolumn
@@ -72,15 +76,13 @@ class SudokuSolver1(object):
         numiter = 0
         while self._icurrentrow != -1 and self._icurrentcolumn != -1:
             numiter += 1
-            print 'it=%d: currow=%d; curcol=%d; curval=%d'%(numiter, self._icurrentrow, self._icurrentcolumn, self._board._data[self._icurrentrow][self._icurrentcolumn])
-            if numiter == 44:
-                import IPython; IPython.embed()
+            print 'it=%d: currow=%d; curcol=%d; curval=%d'%(numiter, self._icurrentrow, self._icurrentcolumn, self._board[self._icurrentrow][self._icurrentcolumn])
             
-            if self._board._data[self._icurrentrow][self._icurrentcolumn] < 9:
-                self._board._data[self._icurrentrow][self._icurrentcolumn] += 1
+            if self._board[self._icurrentrow][self._icurrentcolumn] < 9:
+                self._board[self._icurrentrow][self._icurrentcolumn] += 1
             else:
                 # Cannot go further. Reset this cell and move back.
-                self._board._data[self._icurrentrow][self._icurrentcolumn] = 0
+                self._board[self._icurrentrow][self._icurrentcolumn] = 0
                 self._icurrentrow, self._icurrentcolumn = self.GetPreviousEmptyCell(self._icurrentrow, self._icurrentcolumn)
                 continue
                 
