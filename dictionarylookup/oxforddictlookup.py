@@ -47,13 +47,22 @@ frame.place(relx=0.5, rely=0.1, relwidth=0.75, relheight=0.1, anchor='n')
 
 entry = tk.Entry(frame, font=37)
 entry.place(relwidth=0.65, relheight=1.0)
+entry.focus() # focus on this entry
 
 infobox = tk.Frame(root, bg='#ffffff', border=10)
 infobox.place(relx=0.5, rely=0.25, relwidth=0.75, relheight=0.6, anchor='n')
 infolabel = tk.Label(infobox, anchor='nw', justify='left')
 infolabel.place(relwidth=1.0, relheight=1.0)
 
-button = tk.Button(frame, text='Go!', command=lambda: UpdateLabel(infolabel, entry.get(), GetMeanings(entry.get())))
+onClick = lambda: UpdateLabel(infolabel, entry.get(), GetMeanings(entry.get()))
+button = tk.Button(frame, text='Go!', command=onClick)
 button.place(relwidth=0.35, relheight=1.0, relx=0.65)
+
+onEnter = lambda event: UpdateLabel(infolabel, entry.get(), GetMeanings(entry.get()))
+root.bind('<Return>', onEnter)
+
+def onCtrlQ(root, event):
+    root.destroy()
+root.bind('<Control-q>', lambda event: onCtrlQ(root, event))
 
 root.mainloop()
