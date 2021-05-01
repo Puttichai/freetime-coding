@@ -49,13 +49,13 @@ entry = tk.Entry(frame, font=37)
 entry.place(relwidth=0.65, relheight=1.0)
 entry.focus() # focus on this entry
 
-infobox = tk.Frame(root, bg='#ffffff', border=10)
+infobox = tk.Frame(root, bg='#ffffff', border=5)
 infobox.place(relx=0.5, rely=0.25, relwidth=0.75, relheight=0.6, anchor='n')
 infolabel = tk.Label(infobox, anchor='nw', justify='left')
 infolabel.place(relwidth=1.0, relheight=1.0)
 
 onClick = lambda: UpdateLabel(infolabel, entry.get(), GetMeanings(entry.get()))
-button = tk.Button(frame, text='Go!', command=onClick)
+button = tk.Button(frame, text='Define', command=onClick)
 button.place(relwidth=0.35, relheight=1.0, relx=0.65)
 
 onEnter = lambda event: UpdateLabel(infolabel, entry.get(), GetMeanings(entry.get()))
@@ -65,4 +65,5 @@ def onCtrlQ(root, event):
     root.destroy()
 root.bind('<Control-q>', lambda event: onCtrlQ(root, event))
 
+root.winfo_toplevel().title('Dictionary')
 root.mainloop()
